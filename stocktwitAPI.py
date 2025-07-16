@@ -14,7 +14,7 @@ ACCESS_TOKEN = "5f9331e676684789acdbb888934a2fc502555f65"
 SAVEPATH = "data/test_data_%s.json" % str(datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
 
 # access stocktwits API via trending data request
-raw_data = requests.get("https://api.stocktwits.com/api/2/streams/trending.json?access_token=" + ACCESS_TOKEN)
+raw_data = requests.get("https://api.stocktwits.com/api/2/streams/trending.json?access_token=" + ACCESS_TOKEN, timeout=60)
 raw_data_json = raw_data.json()
 message_data = raw_data_json['messages']
 
