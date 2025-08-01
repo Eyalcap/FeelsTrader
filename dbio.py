@@ -23,11 +23,10 @@ class DbIO:
         # fix the use of id here. I want this to be taken care of by the DB itself.
         # Prepare sql query to insert a new data point.
         sql = "INSERT INTO datapoint(ID, TICKER, DATE, SENTIMENT, TEXT) " \
-              "VALUES ('%d', '%s', '%s', '%d', '%s' )" % \
-              (self.id, ticker, time.strftime('%Y-%m-%d %H:%M:%S'), sentiment, text)
+              "VALUES (?, ?, ?, ?, ? )"
         try:
 
-            self.cursor.execute(sql)
+            self.cursor.execute(sql, (self.id, ticker, time.strftime('%Y-%m-%d %H:%M:%S'), sentiment, text, ))
             self.db.commit()
             self.id += 1
         except:
@@ -35,17 +34,13 @@ class DbIO:
             print("Error: db rolled back")
 
     def read_datapoint_record(self, id):
-        sql = "SELECT * FROM datapoint WHERE id = '%d'" % (id)
+        sql = "SELECT * FROM datapoint WHERE id = ?"
 
         try:
-            self.cursor.execute(sql)
+            self.cursor.execute(sql, ((id), ))
             results = self.cursor.fetchall()
             for row in results:
                 id = row[0]
-                ticker = row[1]
-                date = row[2]
-                sentiment = row[3]
-                text = row[4]
                 #print("id: %d, ticker: %s, date: %s, sentiment: %d, text: %s" %
                 #     (id, ticker, date, sentiment, text))
         except:
